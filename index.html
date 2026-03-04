@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+    <meta charset="UTF-8">
+    <title>Moja lična web stranica</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background: linear-gradient(to right, #e0f7fa, #ffffff);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: #003366;
+        }
+
+        h1, h2 {
+            text-align: center;
+        }
+
+        h1 {
+            color: #004080;
+            margin-bottom: 15px;
+        }
+
+        .sekcija {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px auto;
+            max-width: 600px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid #003366;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #0288d1;
+            color: white;
+        }
+
+        ul, ol {
+            padding-left: 20px;
+        }
+
+        img {
+            display: block;
+            margin: 10px auto;
+            border-radius: 8px;
+        }
+
+        button {
+            background-color: #0288d1;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: #026aa7;
+        }
+
+        /* Responsive za mobilne uređaje */
+        @media screen and (max-width: 500px) {
+            .sekcija {
+                margin: 10px 5px;
+                padding: 15px;
+            }
+            button {
+                width: 100%;
+                margin: 5px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NASLOV -->
+    <div class="sekcija">
+        <h1>Dobrodošli na moju web stranicu</h1>
+    </div>
+
+  <!-- O MENI -->
+<div class="sekcija-sa-slikom">
+    <div class="sekcija">
+        <h2>O meni</h2>
+        <p>
+            Zovem se Marko Marković. Učenik sam devetog razreda.
+            Volim informatiku jer učimo kako se prave web stranice.
+            U slobodno vrijeme igram fudbal i družim se sa prijateljima.
+        </p>
+		<div class="slika-kontejner">
+        <img 
+            src="slika2.png" 
+            alt="Opis slike"
+            style="border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);"
+            class="moja-slika"
+        >
+    </div>
+    </div>
+    
+</div>
+
+<!-- CSS - dodaj u <head> -->
+<style>
+    .sekcija-sa-slikom {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        align-items: center;
+        margin: 40px 0;
+        padding: 30px;
+        background: #f7fafc;
+        border-radius: 12px;
+    }
+    
+    .sekcija-sa-slikom .sekcija {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    
+    .sekcija-sa-slikom h2 {
+        font-size: 24px;
+        color: #1a202c;
+        margin-bottom: 15px;
+        font-weight: 700;
+    }
+    
+    .sekcija-sa-slikom p {
+        font-size: 15px;
+        color: #4a5568;
+        line-height: 1.6;
+    }
+    
+    .slika-kontejner {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .sekcija-sa-slikom img {
+        width: 100%;
+        height: auto;
+        max-width: 350px;
+        border-radius: 8px;
+    }
+    
+    /* Za male ekrane - slike jedno ispod drugog */
+    @media (max-width: 968px) {
+        .sekcija-sa-slikom {
+            grid-template-columns: 1fr;
+            gap: 30px;
+            padding: 20px;
+        }
+        
+        .sekcija-sa-slikom h2 {
+            font-size: 20px;
+        }
+        
+        .sekcija-sa-slikom img {
+            max-width: 100%;
+        }
+    }
+</style>
+
+<!-- CSS - dodaj u <head> -->
+<style>
+    .sekcija-sa-slikom {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        margin: 30px 0;
+    }
+    
+    .sekcija-sa-slikom .sekcija {
+        flex: 1;
+    }
+    
+    .sekcija-sa-slikom img {
+        flex-shrink: 0;
+    }
+    
+    /* Za male ekrane - slike jedno ispod drugog */
+    @media (max-width: 768px) {
+        .sekcija-sa-slikom {
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .sekcija-sa-slikom img {
+            width: 100% !important;
+            height: auto !important;
+            max-width: 300px;
+        }
+    }
+</style>
+    <!-- HOBIJI -->
+    <div class="sekcija">
+        <h2>Moji hobiji</h2>
+        <ul>
+            <li>Fudbal</li>
+            <li>Video igrice</li>
+            <li>Gledanje filmova</li>
+        </ul>
+    </div>
+
+    <!-- OMILJENI PREDMETI -->
+    <div class="sekcija">
+        <h2>Omiljeni predmeti</h2>
+        <ol>
+            <li>Informatika</li>
+            <li>Matematika</li>
+            <li>Engleski jezik</li>
+        </ol>
+    </div>
+
+    <!-- SLIKA -->
+    <div class="sekcija">
+        <h2>Moja slika</h2>
+		<div class="slika-kontejner">
+        <img 
+    src="slika1.png" 
+    alt="Opis slike"
+    width="200"
+    height="300"
+    style="border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);"
+    class="moja-slika"
+>
+    </div>
+    </div>
+
+    <!-- TABELA -->
+    <div class="sekcija">
+        <h2>Raspored časova</h2>
+        <table>
+            <tr>
+                <th>Dan</th>
+                <th>Predmet</th>
+            </tr>
+            <tr>
+                <td>Ponedjeljak</td>
+                <td>Matematika</td>
+            </tr>
+            <tr>
+                <td>Utorak</td>
+                <td>Informatika</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- LINK -->
+    <div class="sekcija">
+        <p>
+            Posjetite web stranicu škole:
+            <a href="https://www.google.ba" target="_blank">Kliknite ovdje</a>
+        </p>
+    </div>
+
+    <!-- DODATNE STRANICE -->
+    <div class="sekcija">
+        <h2>Dodatne stranice</h2>
+        <button onclick="location.href='kalkulator.html'">Otvori kalkulator</button>
+        <button onclick="location.href='srednjaocjena_modern.html'">Izračunaj srednju ocjenu</button>
+    </div>
+	
+
+</body>
+</html>

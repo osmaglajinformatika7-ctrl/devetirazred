@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+    <meta charset="UTF-8">
+    <title>Kalkulator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #e0f7fa, #ffffff);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        h1 {
+            color: #003366;
+            margin-bottom: 20px;
+        }
+
+        #ekran {
+            width: 260px;
+            height: 50px;
+            font-size: 1.5rem;
+            text-align: right;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 2px solid #003366;
+            background-color: #ffffff;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .tipke {
+            display: grid;
+            grid-template-columns: repeat(4, 65px);
+            grid-gap: 12px;
+        }
+
+        .tipke button {
+            padding: 15px;
+            font-size: 1.3rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+
+        /* Brojevi */
+        .broj {
+            background-color: #0288d1;
+            color: white;
+        }
+
+        /* Operatori */
+        .operator {
+            background-color: #ff7043;
+            color: white;
+        }
+
+        /* Dugme = */
+        .jednako {
+            background-color: #43a047;
+            color: white;
+        }
+
+        /* Dugme C */
+        .clear {
+            background-color: #d32f2f;
+            color: white;
+        }
+
+        /* Hover i pritisak */
+        .tipke button:hover {
+            opacity: 0.85;
+        }
+
+        .tipke button:active {
+            transform: translateY(2px);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        #buttons-bottom {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        #buttons-bottom button {
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: #0288d1;
+            color: white;
+        }
+
+        #buttons-bottom button:hover {
+            background-color: #026aa7;
+        }
+
+        @media screen and (max-width: 500px) {
+            #ekran {
+                width: 90%;
+            }
+            .tipke {
+                grid-template-columns: repeat(4, 1fr);
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Kalkulator</h1>
+    <input type="text" id="ekran" readonly>
+
+    <div class="tipke">
+        <button class="broj" onclick="unos('7')">7</button>
+        <button class="broj" onclick="unos('8')">8</button>
+        <button class="broj" onclick="unos('9')">9</button>
+        <button class="operator" onclick="unos('/')">/</button>
+
+        <button class="broj" onclick="unos('4')">4</button>
+        <button class="broj" onclick="unos('5')">5</button>
+        <button class="broj" onclick="unos('6')">6</button>
+        <button class="operator" onclick="unos('*')">*</button>
+
+        <button class="broj" onclick="unos('1')">1</button>
+        <button class="broj" onclick="unos('2')">2</button>
+        <button class="broj" onclick="unos('3')">3</button>
+        <button class="operator" onclick="unos('-')">-</button>
+
+        <button class="broj" onclick="unos('0')">0</button>
+        <button class="broj" onclick="unos('.')">.</button>
+        <button class="jednako" onclick="izracunaj()">=</button>
+        <button class="operator" onclick="unos('+')">+</button>
+    </div>
+
+    <div id="buttons-bottom">
+        <button class="clear" onclick="obrisi()">C</button>
+        <button onclick="location.href='index.html'">Nazad na početnu</button>
+    </div>
+
+    <script>
+        let ekran = document.getElementById("ekran");
+
+        function unos(vrijednost) {
+            ekran.value += vrijednost;
+        }
+
+        function obrisi() {
+            ekran.value = "";
+        }
+
+        function izracunaj() {
+            try {
+                ekran.value = eval(ekran.value);
+            } catch (e) {
+                alert("Neispravan izraz!");
+            }
+        }
+    </script>
+
+</body>
+</html>

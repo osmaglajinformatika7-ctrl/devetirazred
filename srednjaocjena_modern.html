@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Prosjeka Ocjena</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 900px;
+            width: 100%;
+            padding: 40px;
+        }
+        
+        h1 {
+            color: #1a202c;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: 700;
+        }
+        
+        .form-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 0;
+        }
+        
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #2d3748;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+            background-color: #f7fafc;
+        }
+        
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #10b981;
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+        
+        .subjects-wrapper {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .subject-row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s ease;
+        }
+        
+        .subject-row:hover {
+            border-color: #10b981;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.1);
+        }
+        
+        .subject-name {
+            flex: 1;
+            color: #2d3748;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .subject-input {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 100px;
+        }
+        
+        .subject-input label {
+            margin: 0;
+            font-size: 12px;
+            color: #718096;
+            text-transform: none;
+            letter-spacing: 0;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .subject-input input {
+            width: 60px;
+            padding: 8px;
+            text-align: center;
+            font-weight: 700;
+            margin: 0;
+            background: white;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        button {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .btn-calculate {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+        }
+        
+        .btn-calculate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6);
+        }
+        
+        .btn-calculate:active {
+            transform: translateY(0);
+        }
+        
+        .btn-pdf {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+        }
+        
+        .btn-pdf:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.6);
+        }
+        
+        .btn-pdf:active {
+            transform: translateY(0);
+        }
+        
+        .btn-pdf:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+        
+        .result {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-top: 30px;
+            display: none;
+            box-shadow: 0 10px 40px rgba(16, 185, 129, 0.3);
+        }
+        
+        .result.show {
+            display: block;
+        }
+        
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        
+        .result-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .result-label {
+            font-weight: 500;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            opacity: 0.9;
+        }
+        
+        .result-value {
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .success-badge {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: 700;
+            margin-top: 10px;
+            text-transform: uppercase;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            align-self: flex-start;
+            border: 2px solid;
+        }
+        
+        .success-1 {
+            background-color: #ef4444;
+            color: white;
+            border-color: #dc2626;
+        }
+        
+        .success-2 {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .success-3 {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .success-4 {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .success-5 {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .error {
+            color: #ef4444;
+            font-size: 12px;
+            margin-top: 5px;
+            font-weight: 500;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px;
+            }
+            
+            .form-wrapper {
+                grid-template-columns: 1fr;
+            }
+            
+            .subject-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .subject-input {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            .button-group {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Kalkulator Prosjeka Ocjena</h1>
+        
+        <div class="form-wrapper">
+            <div class="form-group">
+                <label for="studentName">Ime i Prezime Ucenika:</label>
+                <input type="text" id="studentName" placeholder="Unesite ime i prezime">
+                <div class="error" id="nameError"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="classSelection">Odaberite Razred:</label>
+                <select id="classSelection">
+                    <option value="">-- Odaberite razred --</option>
+                    <option value="6">6. razred</option>
+                    <option value="7">7. razred</option>
+                    <option value="8">8. razred</option>
+                    <option value="9">9. razred</option>
+                </select>
+                <div class="error" id="classError"></div>
+            </div>
+        </div>
+        
+        <div class="form-group full">
+            <label>Unesite Ocjene za Predmete:</label>
+            <div class="subjects-wrapper" id="subjectsContainer">
+                <!-- Predmeti ce biti dinamicki uneseni -->
+            </div>
+            <div class="error" id="gradesError"></div>
+        </div>
+        
+        <div class="button-group">
+            <button class="btn-calculate" onclick="calculateGrade()">Izracunaj Prosjek</button>
+            <button class="btn-pdf" id="pdfBtn" onclick="exportPDF()" disabled>Preuzmi PDF</button>
+        </div>
+        
+        <div class="result" id="result">
+            <div class="result-grid">
+                <div class="result-item">
+                    <span class="result-label">Ucenik:</span>
+                    <span class="result-value" id="resultStudent">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Razred:</span>
+                    <span class="result-value" id="resultClass">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Srednja Ocjena:</span>
+                    <span class="result-value" id="resultAverage">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Uspjeh:</span>
+                    <span class="result-value" id="resultSuccess">-</span>
+                    <span class="success-badge" id="successBadge">-</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const subjects = {
+            6: [
+                'Bosanski jezik i knjizevnost',
+                'Engleski jezik',
+                'Njemacki jezik',
+                'Matematika',
+                'Muzicka kultura',
+                'Likovna kultura',
+                'Tjelesni i zdravstveni odgoj',
+                'Biologija',
+                'Geografija',
+                'Historija',
+                'Tehniska kultura',
+                'Informatika',
+                'Islamska vjeronauka'
+            ],
+            7: [
+                'Bosanski jezik i knjizevnost',
+                'Engleski jezik',
+                'Njemacki jezik',
+                'Matematika',
+                'Muzicka kultura',
+                'Likovna kultura',
+                'Tjelesni i zdravstveni odgoj',
+                'Biologija',
+                'Geografija',
+                'Historija',
+                'Fizika',
+                'Tehniska kultura',
+                'Informatika',
+                'Islamska vjeronauka'
+            ],
+            8: [
+                'Bosanski jezik i knjizevnost',
+                'Engleski jezik',
+                'Njemacki jezik',
+                'Matematika',
+                'Muzicka kultura',
+                'Likovna kultura',
+                'Tjelesni i zdravstveni odgoj',
+                'Biologija',
+                'Geografija',
+                'Historija',
+                'Fizika',
+                'Hemija',
+                'Tehniska kultura',
+                'Informatika',
+                'Islamska vjeronauka'
+            ],
+            9: [
+                'Bosanski jezik i knjizevnost',
+                'Engleski jezik',
+                'Njemacki jezik',
+                'Matematika',
+                'Muzicka kultura',
+                'Likovna kultura',
+                'Tjelesni i zdravstveni odgoj',
+                'Biologija',
+                'Geografija',
+                'Historija',
+                'Fizika',
+                'Hemija',
+                'Tehniska kultura',
+                'Informatika',
+                'Gradansko obrazovanje',
+                'Islamska vjeronauka'
+            ]
+        };
+        
+        const successNames = {
+            1: 'Nedovoljan',
+            2: 'Dovoljan',
+            3: 'Dobar',
+            4: 'Vrlo dobar',
+            5: 'Odlican'
+        };
+        
+        // Varijabla za čuvanje trenutnog uspjeha (koristimo je u PDF-u)
+        let currentSuccess = null;
+        
+        document.getElementById('classSelection').addEventListener('change', function() {
+            const selectedClass = this.value;
+            clearErrors();
+            if (selectedClass) {
+                renderSubjects(selectedClass);
+            } else {
+                document.getElementById('subjectsContainer').innerHTML = '';
+            }
+        });
+        
+        function renderSubjects(classNum) {
+            const container = document.getElementById('subjectsContainer');
+            container.innerHTML = '';
+            
+            subjects[classNum].forEach((subject, index) => {
+                const div = document.createElement('div');
+                div.className = 'subject-row';
+                div.innerHTML = `
+                    <div class="subject-name">${subject}</div>
+                    <div class="subject-input">
+                        <label for="subject${index}">Ocjena:</label>
+                        <input type="number" id="subject${index}" min="1" max="5" placeholder="1-5">
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+        
+        function clearErrors() {
+            document.getElementById('nameError').textContent = '';
+            document.getElementById('classError').textContent = '';
+            document.getElementById('gradesError').textContent = '';
+        }
+        
+        function calculateGrade() {
+            clearErrors();
+            let hasError = false;
+            
+            const studentName = document.getElementById('studentName').value.trim();
+            if (!studentName) {
+                document.getElementById('nameError').textContent = 'Molim unesite ime i prezime!';
+                hasError = true;
+            }
+            
+            const classNum = document.getElementById('classSelection').value;
+            if (!classNum) {
+                document.getElementById('classError').textContent = 'Molim odaberite razred!';
+                hasError = true;
+            }
+            
+            if (hasError) return;
+            
+            const gradeInputs = document.querySelectorAll('#subjectsContainer input[type="number"]');
+            const grades = [];
+            let hasOneGrade = false;
+            
+            gradeInputs.forEach((input, index) => {
+                const value = parseInt(input.value);
+                if (!value || value < 1 || value > 5) {
+                    document.getElementById('gradesError').textContent = 'Sve ocjene moraju biti izmedu 1 i 5!';
+                    hasError = true;
+                } else {
+                    grades.push(value);
+                    if (value === 1) hasOneGrade = true;
+                }
+            });
+            
+            if (grades.length === 0) {
+                document.getElementById('gradesError').textContent = 'Molim unesite sve ocjene!';
+                hasError = true;
+            }
+            
+            if (hasError) return;
+            
+            // Izracunaj prosjek
+            const average = (grades.reduce((a, b) => a + b, 0) / grades.length).toFixed(2);
+            
+            // Odredi uspjeh
+            let success;
+            if (hasOneGrade) {
+                success = 1; // Nedovoljan - CRVENI BEDZ
+            } else if (average < 2.5) {
+                success = 2; // Dovoljan
+            } else if (average < 3.5) {
+                success = 3; // Dobar
+            } else if (average < 4.5) {
+                success = 4; // Vrlo dobar
+            } else {
+                success = 5; // Odlican
+            }
+            
+            // Čuvamo trenutni uspjeh
+            currentSuccess = success;
+            
+            // Prikazi rezultate
+            document.getElementById('resultStudent').textContent = studentName;
+            document.getElementById('resultClass').textContent = classNum + '. razred';
+            document.getElementById('resultAverage').textContent = average;
+            document.getElementById('resultSuccess').textContent = successNames[success] + ' (' + success + ')';
+            
+            const badge = document.getElementById('successBadge');
+            badge.textContent = successNames[success];
+            badge.className = 'success-badge success-' + success;
+            
+            document.getElementById('result').classList.add('show');
+            document.getElementById('pdfBtn').disabled = false;
+        }
+        
+        function exportPDF() {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF();
+            
+            const studentName = document.getElementById('studentName').value;
+            const classNum = document.getElementById('classSelection').value;
+            const average = document.getElementById('resultAverage').textContent;
+            const successNum = currentSuccess;
+            const successFullName = successNames[successNum];
+            
+            pdf.setFont("helvetica");
+            
+            // Naslov
+            pdf.setFontSize(18);
+            pdf.setTextColor(16, 185, 129);
+            pdf.text('Izvjestaj o Prosjeku Ocjena', 105, 15, { align: 'center' });
+            
+            // Linija
+            pdf.setDrawColor(16, 185, 129);
+            pdf.setLineWidth(0.5);
+            pdf.line(20, 22, 190, 22);
+            
+            // Podaci ucenika
+            pdf.setFontSize(12);
+            pdf.setTextColor(45, 55, 72);
+            pdf.text('Ucenik: ' + studentName, 20, 35);
+            pdf.text('Razred: ' + classNum + '.', 20, 45);
+            
+            // Rezultati
+            pdf.setFontSize(13);
+            pdf.setTextColor(16, 185, 129);
+            pdf.text('REZULTATI', 20, 60);
+            
+            pdf.setFontSize(11);
+            pdf.setTextColor(45, 55, 72);
+            pdf.text('Srednja ocjena: ' + average, 20, 70);
+            pdf.text('Uspjeh: ' + successFullName + ' ( ' + successNum + ' )', 20, 80);
+            
+            // Detaljne ocjene
+            pdf.setFontSize(11);
+            pdf.setTextColor(16, 185, 129);
+            pdf.text('Ocjene po predmetima:', 20, 95);
+            
+            const gradeInputs = document.querySelectorAll('#subjectsContainer input[type="number"]');
+            const classNum_val = document.getElementById('classSelection').value;
+            let yPos = 105;
+            
+            pdf.setFontSize(10);
+            pdf.setTextColor(45, 55, 72);
+            
+            gradeInputs.forEach((input, index) => {
+                const subject = subjects[classNum_val][index];
+                const grade = input.value;
+                
+                // Poravnaj predmete na lijevo, ocjene na desno
+                pdf.text(subject, 25, yPos);
+                pdf.text(grade, 180, yPos, { align: 'right' });
+                yPos += 7;
+            });
+            
+            // Datum
+            const today = new Date();
+            const dateString = today.getDate() + '.' + (today.getMonth() + 1) + '.' + today.getFullYear();
+            pdf.setFontSize(9);
+            pdf.setTextColor(100, 100, 100);
+            pdf.text('Datum: ' + dateString, 20, yPos + 15);
+            
+            pdf.save('Izvjestaj_Ocjena_' + studentName.replace(/\s+/g, '_') + '.pdf');
+        }
+    </script>
+</body>
+</html>
